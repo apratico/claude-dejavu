@@ -1,0 +1,40 @@
+{
+  "name": "claude-dejavu",
+  "version": "0.1.0",
+  "description": "Cache-first plugin for Claude Code: intercepts deterministic read-only tool calls (Read, Grep, Glob, safe Bash subset) and serves cached results, cutting token spend on long sessions.",
+  "license": "MIT",
+  "author": {
+    "name": "Alessandro Pratico'",
+    "url": "https://github.com/apratico"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/apratico/claude-dejavu.git"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "build:watch": "node scripts/build.mjs --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
+    "lint": "tsc --noEmit",
+    "clean": "rimraf hooks/*.js scripts/cli.js coverage .tsbuildinfo"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.5.0",
+    "pino": "^9.5.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.11",
+    "@types/node": "^20.16.10",
+    "@vitest/coverage-v8": "^2.1.4",
+    "esbuild": "^0.24.0",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.4"
+  }
+}

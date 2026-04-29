@@ -1,0 +1,18 @@
+description = "claude-dejavu cache control. Subcommands: stats, clear, why."
+prompt = """
+The user invoked `/dejavu {{args}}`. Route to the right subcommand by running
+the dejavu CLI via the Bash tool, then relay its plain-text output back. Do
+not interpret or summarize — print the CLI output literally.
+
+Subcommand routing (parse `{{args}}` as a shell-style argv):
+
+  - `stats`                       → `node "${CLAUDE_PLUGIN_ROOT}/scripts/cli.js" stats`
+  - `clear`                       → `node "${CLAUDE_PLUGIN_ROOT}/scripts/cli.js" clear`
+  - `clear --tool <ToolName>`     → `node "${CLAUDE_PLUGIN_ROOT}/scripts/cli.js" clear --tool <ToolName>`
+  - `why <hash>`                  → `node "${CLAUDE_PLUGIN_ROOT}/scripts/cli.js" why <hash>`
+
+If the args are empty or unrecognized, run `node "${CLAUDE_PLUGIN_ROOT}/scripts/cli.js" --help`.
+
+Always pass the args through verbatim — do not rewrite hashes, tool names or
+flags. The CLI prints structured plain text (no JSON) intended for the user.
+"""

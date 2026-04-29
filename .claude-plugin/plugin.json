@@ -1,0 +1,19 @@
+{
+  "name": "claude-dejavu",
+  "version": "0.1.0",
+  "description": "Cache-first plugin for Claude Code. Intercepts deterministic read-only tool calls (Read, Grep, Glob, safe Bash subset) via PreToolUse and serves cached results, cutting token spend on long sessions.",
+  "author": {
+    "name": "Alessandro Pratico'",
+    "url": "https://github.com/apratico"
+  },
+  "repository": "https://github.com/apratico/claude-dejavu",
+  "license": "MIT",
+  "keywords": [
+    "claude-code",
+    "plugin",
+    "cache",
+    "tokens",
+    "performance",
+    "hooks"
+  ]
+}

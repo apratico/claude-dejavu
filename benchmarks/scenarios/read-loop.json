@@ -1,0 +1,9 @@
+{
+  "name": "read-loop",
+  "description": "Reads the same package.json 30 times in a row — simulates Claude re-checking the entrypoint over and over inside one session.",
+  "steps": [
+    { "toolName": "Read", "toolInput": { "file_path": "/repo/package.json" }, "toolOutput": "{\n  \"name\": \"example\",\n  \"version\": \"1.0.0\",\n  \"main\": \"src/index.ts\",\n  \"scripts\": { \"build\": \"tsc\", \"test\": \"vitest run\", \"start\": \"node dist/index.js\" },\n  \"dependencies\": { \"express\": \"^5.0.0\", \"pg\": \"^8.13.0\" },\n  \"devDependencies\": { \"typescript\": \"^5.6.0\", \"vitest\": \"^2.1.4\", \"@types/node\": \"^20.16.10\" }\n}" },
+    { "toolName": "Read", "toolInput": { "file_path": "/repo/package.json" }, "toolOutput": "{\n  \"name\": \"example\",\n  \"version\": \"1.0.0\",\n  \"main\": \"src/index.ts\",\n  \"scripts\": { \"build\": \"tsc\", \"test\": \"vitest run\", \"start\": \"node dist/index.js\" },\n  \"dependencies\": { \"express\": \"^5.0.0\", \"pg\": \"^8.13.0\" },\n  \"devDependencies\": { \"typescript\": \"^5.6.0\", \"vitest\": \"^2.1.4\", \"@types/node\": \"^20.16.10\" }\n}" },
+    { "toolName": "Read", "toolInput": { "file_path": "/repo/package.json" }, "toolOutput": "{\n  \"name\": \"example\",\n  \"version\": \"1.0.0\",\n  \"main\": \"src/index.ts\",\n  \"scripts\": { \"build\": \"tsc\", \"test\": \"vitest run\", \"start\": \"node dist/index.js\" }\n}" }
+  ]
+}

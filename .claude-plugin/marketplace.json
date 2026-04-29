@@ -1,0 +1,20 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "apratico",
+  "description": "Claude Code plugins by Alessandro Pratico'.",
+  "owner": {
+    "name": "Alessandro Pratico'",
+    "url": "https://github.com/apratico"
+  },
+  "plugins": [
+    {
+      "name": "claude-dejavu",
+      "description": "Cache-first plugin for Claude Code. Cuts redundant tool-call tokens on long sessions.",
+      "source": "./",
+      "category": "productivity",
+      "version": "0.1.0",
+      "tags": ["cache", "tokens", "performance", "hooks"],
+      "homepage": "https://github.com/apratico/claude-dejavu"
+    }
+  ]
+}
