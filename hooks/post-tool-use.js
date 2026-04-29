@@ -554,23 +554,56 @@ function tokenize(input) {
 var INVALIDATING_TOOLS = ["Edit", "Write", "MultiEdit"];
 function classifyToolCall(toolName, toolInput, cwd, cfg) {
   if (!cfg.enabled) {
-    return { cacheable: false, reason: "plugin disabled", mtimeFiles: [], ttlBucket: "none" };
+    return { cacheable: false, reason: "plugin disabled", mtimeFiles: [], ttlBucket: "none", keyInput: {} };
   }
   if (cfg.disabledTools.includes(toolName)) {
-    return { cacheable: false, reason: "tool disabled in config", mtimeFiles: [], ttlBucket: "none" };
+    return { cacheable: false, reason: "tool disabled in config", mtimeFiles: [], ttlBucket: "none", keyInput: {} };
   }
   switch (toolName) {
     case "Read": {
       const filePath = toolInput.file_path;
       if (typeof filePath !== "string" || !filePath) {
-        return { cacheable: false, reason: "missing file_path", mtimeFiles: [], ttlBucket: "none" };
+        return { cacheable: false, reason: "missing file_path", mtimeFiles: [], ttlBucket: "none", keyInput: {} };
       }
       const abs = (0, import_node_path4.isAbsolute)(filePath) ? filePath : (0, import_node_path4.resolve)(cwd, filePath);
-      return { cacheable: true, reason: "ok", mtimeFiles: [abs], ttlBucket: "read" };
+      return {
+        cacheable: true,
+        reason: "ok",
+        mtimeFiles: [abs],
+        ttlBucket: "read",
+        keyInput: pickFields(toolInput, ["file_path", "offset", "limit"])
+      };
     }
-    case "Grep":
+    case "Grep": {
+      return {
+        cacheable: true,
+        reason: "ok (TTL-only)",
+        mtimeFiles: [],
+        ttlBucket: "grep",
+        keyInput: pickFields(toolInput, [
+          "pattern",
+          "path",
+          "glob",
+          "type",
+          "output_mode",
+          "head_limit",
+          "multiline",
+          "-i",
+          "-n",
+          "-A",
+          "-B",
+          "-C"
+        ])
+      };
+    }
     case "Glob": {
-      return { cacheable: true, reason: "ok (TTL-only)", mtimeFiles: [], ttlBucket: "grep" };
+      return {
+        cacheable: true,
+        reason: "ok (TTL-only)",
+        mtimeFiles: [],
+        ttlBucket: "grep",
+        keyInput: pickFields(toolInput, ["pattern", "path"])
+      };
     }
     case "Bash": {
       const command = typeof toolInput.command === "string" ? toolInput.command : "";
@@ -582,7 +615,10 @@ function classifyToolCall(toolName, toolInput, cwd, cfg) {
         cacheable: verdict.cacheable,
         reason: verdict.reason,
         mtimeFiles: [],
-        ttlBucket: verdict.cacheable ? "bash" : "none"
+        ttlBucket: verdict.cacheable ? "bash" : "none",
+        // Only the actual command is semantic — `description`, `timeout`,
+        // `run_in_background` and other UI metadata must NOT enter the key.
+        keyInput: { command }
       };
     }
     default:
@@ -590,9 +626,19 @@ function classifyToolCall(toolName, toolInput, cwd, cfg) {
         cacheable: false,
         reason: `tool '${toolName}' not in supported set`,
         mtimeFiles: [],
-        ttlBucket: "none"
+        ttlBucket: "none",
+        keyInput: {}
       };
   }
+}
+function pickFields(obj, fields) {
+  const out = {};
+  for (const f of fields) {
+    if (Object.prototype.hasOwnProperty.call(obj, f)) {
+      out[f] = obj[f];
+    }
+  }
+  return out;
 }
 function extractInvalidationPath(toolName, toolInput, cwd) {
   if (!INVALIDATING_TOOLS.includes(toolName)) return null;
@@ -703,13 +749,13 @@ void withErrorLogging("post-tool-use", async () => {
     }
     const { hash } = buildKey({
       toolName: input.tool_name,
-      toolInput: input.tool_input,
+      toolInput: verdict.keyInput,
       cwd: input.cwd,
       mtimeFiles: verdict.mtimeFiles
     });
     store.put(hash, input.tool_name, value, {
       ttlSeconds: ttlForBucket(verdict.ttlBucket, cfg),
-      toolInputJson: JSON.stringify(input.tool_input)
+      toolInputJson: JSON.stringify(verdict.keyInput)
     });
     log.info({ tool: input.tool_name, hash, sizeBytes: value.length }, "post: cached");
     writeJsonStdout({});

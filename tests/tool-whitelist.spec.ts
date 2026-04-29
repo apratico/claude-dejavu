@@ -73,6 +73,48 @@ describe("extractInvalidationPath", () => {
   });
 });
 
+describe("keyInput normalization", () => {
+  test("Bash drops description and other UI metadata", () => {
+    const v = classifyToolCall(
+      "Bash",
+      { command: "ls -la /tmp", description: "list tmp", timeout: 5000 },
+      "/cwd",
+      DEFAULT_CONFIG,
+    );
+    expect(v.keyInput).toEqual({ command: "ls -la /tmp" });
+  });
+
+  test("Read keeps only file_path / offset / limit", () => {
+    const v = classifyToolCall(
+      "Read",
+      { file_path: "/tmp/x", description: "read it", offset: 0, limit: 100 },
+      "/",
+      DEFAULT_CONFIG,
+    );
+    expect(v.keyInput).toEqual({ file_path: "/tmp/x", offset: 0, limit: 100 });
+  });
+
+  test("Glob keeps only pattern / path", () => {
+    const v = classifyToolCall(
+      "Glob",
+      { pattern: "**/*.ts", path: "/repo", description: "find ts" },
+      "/",
+      DEFAULT_CONFIG,
+    );
+    expect(v.keyInput).toEqual({ pattern: "**/*.ts", path: "/repo" });
+  });
+
+  test("Grep keeps semantic search fields and drops description", () => {
+    const v = classifyToolCall(
+      "Grep",
+      { pattern: "TODO", path: "/repo", glob: "*.ts", description: "find todos" },
+      "/",
+      DEFAULT_CONFIG,
+    );
+    expect(v.keyInput).toEqual({ pattern: "TODO", path: "/repo", glob: "*.ts" });
+  });
+});
+
 describe("ttlForBucket", () => {
   test("maps each bucket to the configured value", () => {
     const cfg = { ...DEFAULT_CONFIG, ttl: { read: 0, grep: 60, bash: 3600 } };

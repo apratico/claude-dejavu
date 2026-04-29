@@ -53,7 +53,7 @@ void withErrorLogging("pre-tool-use", async () => {
   try {
     const { hash } = buildKey({
       toolName: input.tool_name,
-      toolInput: input.tool_input,
+      toolInput: verdict.keyInput,
       cwd: input.cwd,
       mtimeFiles: verdict.mtimeFiles,
     });

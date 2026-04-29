@@ -12,7 +12,7 @@
       "description": "Cache-first plugin for Claude Code. Cuts redundant tool-call tokens on long sessions.",
       "source": "./",
       "category": "productivity",
-      "version": "0.1.2",
+      "version": "0.1.3",
       "tags": ["cache", "tokens", "performance", "hooks"],
       "homepage": "https://github.com/apratico/claude-dejavu"
     }

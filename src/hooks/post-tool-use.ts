@@ -73,13 +73,13 @@ void withErrorLogging("post-tool-use", async () => {
 
     const { hash } = buildKey({
       toolName: input.tool_name,
-      toolInput: input.tool_input,
+      toolInput: verdict.keyInput,
       cwd: input.cwd,
       mtimeFiles: verdict.mtimeFiles,
     });
     store.put(hash, input.tool_name, value, {
       ttlSeconds: ttlForBucket(verdict.ttlBucket, cfg),
-      toolInputJson: JSON.stringify(input.tool_input),
+      toolInputJson: JSON.stringify(verdict.keyInput),
     });
     log.info({ tool: input.tool_name, hash, sizeBytes: value.length }, "post: cached");
 
