@@ -1,6 +1,6 @@
 {
   "name": "claude-dejavu",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Cache-first plugin for Claude Code: intercepts deterministic read-only tool calls (Read, Grep, Glob, safe Bash subset) and serves cached results, cutting token spend on long sessions.",
   "license": "MIT",
   "author": {
