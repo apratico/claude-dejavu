@@ -85,10 +85,10 @@ claude plugin install claude-dejavu@apratico
 Slash commands:
 
 ```
-/dejavu stats            # hit rate, tokens saved, cache size
-/dejavu clear            # wipe everything
-/dejavu clear --tool Read # wipe per tool
-/dejavu why <hash>       # explain a cache decision
+/dejavu-stats              # hit rate, tokens saved, cache size
+/dejavu-clear              # wipe everything
+/dejavu-clear --tool Read  # wipe per tool
+/dejavu-why <hash>         # explain a cache decision
 ```
 
 ---

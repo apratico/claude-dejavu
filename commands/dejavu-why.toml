@@ -1,0 +1,2 @@
+description = "Inspect a single claude-dejavu cache entry by its hash (full or prefix from a CACHE_HIT marker)."
+prompt = "Run the Bash tool with this exact command and print the output verbatim, nothing else: node \"${CLAUDE_PLUGIN_ROOT}/scripts/cli.js\" why {{args}}"
